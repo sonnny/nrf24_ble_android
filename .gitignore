@@ -1,1 +1,14 @@
-./token.txt
+bleapp/linux
+bleapp/android
+bleapp/ios
+bleapp/web
+bleapp/.idea
+bleapp/.dart_tool
+bleapp/macos
+bleapp/windows
+bleapp/.gitignore
+bleapp/.metadata
+bleapp/analysis_options.yaml
+bleapp/bleapp.iml
+bleapp/pubspec.lock
+

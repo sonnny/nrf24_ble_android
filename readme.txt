@@ -15,6 +15,13 @@ android app notes:
   some android device ask for permission, some don't
   make sure bluetooth is on
 
+  make sure to add bluetooth permission to filename:
+    android/app/src/main/AndroidManifest.xml
+
+<uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
 
 nrf24l01 receive notes:
 
