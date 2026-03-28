@@ -15,6 +15,10 @@ android app notes:
   some android device ask for permission, some don't
   make sure bluetooth is on
 
+  make sure to change mac address in file: lib/app.dart to match
+  your picow mac address, you can use android app nrfconnect to
+  find out the mac address
+
   make sure to add bluetooth permission to filename:
     android/app/src/main/AndroidManifest.xml
 

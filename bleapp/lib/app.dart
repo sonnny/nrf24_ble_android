@@ -2,11 +2,16 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:get/get.dart';
 import 'dart:convert';
 
-class App extends StatelessWidget {
-  var status = 'connect'.obs;
+class App extends StatefulWidget {
+  App({super.key});
+  @override
+  State<App> createState() => AppState();
+}
+
+class AppState extends State<App> {
+  bool bleConnected = false;
   late BluetoothCharacteristic bleTx;
 
   Future<void> connect() async {
@@ -20,8 +25,12 @@ class App extends StatelessWidget {
       if (s.serviceUuid.toString() == "ff10") bleService = s;
     });
     for (BluetoothCharacteristic c in bleService.characteristics) {
-      if (c.characteristicUuid.toString() == "ff11") bleTx = c;
-      status.value = 'ready';
+      if (c.characteristicUuid.toString() == "ff11") {
+        bleTx = c;
+        setState(() {
+          bleConnected = true;
+        });
+      }
     }
   }
 
@@ -38,13 +47,22 @@ class App extends StatelessWidget {
         children: [
           Text('press ble connect'),
           ElevatedButton(child: Text('ble connect'), onPressed: connect),
-          Obx(
-            () => status.value == 'ready'
-                ? Text('connected!')
-                : CircularProgressIndicator(),
+          Visibility(
+            visible: bleConnected,
+            child: Column(
+              spacing: 50,
+              children: [
+                ElevatedButton(
+                  child: Text('send on'),
+                  onPressed: () => send('on '),
+                ),
+                ElevatedButton(
+                  child: Text('send off'),
+                  onPressed: () => send('off'),
+                ),
+              ],
+            ),
           ),
-          ElevatedButton(child: Text('send on'), onPressed: () => send('on')),
-          ElevatedButton(child: Text('send off'), onPressed: () => send('off')),
         ],
       ),
     );
