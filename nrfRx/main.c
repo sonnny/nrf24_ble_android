@@ -1,3 +1,4 @@
+////////// filename: main.c
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "nrf24.h"

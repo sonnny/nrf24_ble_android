@@ -1,3 +1,4 @@
+////////// filename: home.dart
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
@@ -9,9 +10,11 @@ class Home extends StatelessWidget {
 
 
 
-        This the home page, write any instruction
-        or anyting here.
-        asldkfj
+        make sure bluetooth is on
+        make sure on setting give this app
+            location permission
+        see plugin flutter_blue_plus on what to
+           add to AndroidManifest.xml
         aslkdjf
         aslkjd
       '''),

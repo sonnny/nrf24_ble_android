@@ -1,4 +1,4 @@
-//filename: app.dart
+////////// filename: app.dart
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -45,6 +45,7 @@ class AppState extends State<App> {
       body: Column(
         spacing: 50,
         children: [
+          SizedBox(height: 50),
           Text('press ble connect'),
           ElevatedButton(child: Text('ble connect'), onPressed: connect),
           Visibility(
