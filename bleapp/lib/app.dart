@@ -13,6 +13,8 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   bool bleConnected = false;
   late BluetoothCharacteristic bleTx;
+  double _value = 0.0;
+  bool direction = false;
 
   Future<void> connect() async {
     final BluetoothDevice bleDevice = BluetoothDevice.fromId(
@@ -46,17 +48,63 @@ class AppState extends State<App> {
         spacing: 50,
         children: [
           SizedBox(height: 50),
-          Text('press ble connect'),
           ElevatedButton(child: Text('ble connect'), onPressed: connect),
           Visibility(
             visible: bleConnected,
             child: Column(
               spacing: 50,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      'throttle:',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.0,
+                      ),
+                    ),
+                    // SizedBox(width: 5),
+                    Expanded(
+                      child: Slider(
+                        value: _value,
+                        min: 0.0,
+                        max: 100.0,
+                        divisions: 20,
+                        label: _value.round().toString(),
+                        onChanged: (double d) {
+                          setState(() {
+                            _value = d;
+                          });
+                        },
+                        onChangeEnd: (double newValue) {
+                          setState(() {
+                            _value = newValue;
+                            send('T ' + newValue.round().toString());
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                SwitchListTile(
+                  value: direction,
+                  title: Text('Direction'),
+                  subtitle: Text('forward or reverse'),
+                  onChanged: (bool value) {
+                    setState(() {
+                      direction = !direction;
+                      send('D ' + direction.toString());
+                    });
+                  },
+                ),
+
                 ElevatedButton(
                   child: Text('send on'),
                   onPressed: () => send('on '),
                 ),
+
                 ElevatedButton(
                   child: Text('send off'),
                   onPressed: () => send('off'),

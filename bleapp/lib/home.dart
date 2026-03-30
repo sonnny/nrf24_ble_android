@@ -8,15 +8,17 @@ class Home extends StatelessWidget {
       body: Center(
         child: Text('''
 
-
-
         make sure bluetooth is on
         make sure on setting give this app
             location permission
         see plugin flutter_blue_plus on what to
            add to AndroidManifest.xml
-        aslkdjf
-        aslkjd
+
+      data sent to nrf24l01 receiver
+        T 0 - 100  (T = throttle)
+
+        D false/true (D = direction)
+        
       '''),
       ),
     );
