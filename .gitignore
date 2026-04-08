@@ -13,4 +13,7 @@ bleapp/.metadata
 bleapp/analysis_options.yaml
 bleapp/bleapp.iml
 bleapp/pubspec.lock
+nrfRx/build
+nrfTx/build
+
 

@@ -8,6 +8,7 @@ add_executable(nrf_receive main.c)
 
 target_link_libraries(nrf_receive
 pico_stdlib
+hardware_i2c
 hardware_spi)
 
 pico_enable_stdio_usb(nrf_receive 1)

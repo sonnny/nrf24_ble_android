@@ -6,14 +6,14 @@
 #include "ble/ble.h"
 #include "nrf24.h"
 
-char ble_data[80];
+char ble_data[16];
 
 static PT_THREAD (ble_thread(struct pt *pt)){
   PT_BEGIN(pt);
   while(1){
     PT_SEM_SAFE_WAIT(pt, &BLUETOOTH_READY);
     nrf24_sendMessage(ble_data);
-    printf("data from ble: %s\n", ble_data);
+    // printf("data from ble: %s\n", ble_data);
   }
   PT_END(pt);}
   

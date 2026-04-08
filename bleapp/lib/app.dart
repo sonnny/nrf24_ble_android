@@ -80,7 +80,8 @@ class AppState extends State<App> {
                         onChangeEnd: (double newValue) {
                           setState(() {
                             _value = newValue;
-                            send('T ' + newValue.round().toString());
+                            print('T ' + newValue.round().toString());
+                            send('TT ' + newValue.round().toString());
                           });
                         },
                       ),
@@ -95,19 +96,24 @@ class AppState extends State<App> {
                   onChanged: (bool value) {
                     setState(() {
                       direction = !direction;
-                      send('D ' + direction.toString());
+                      send('DD ' + direction.toString());
+                      // if (direction)
+                      //   send('FFORWARD1111111');
+                      // else
+                      //  send('RREVERSE22222222');
+                      // send('D ' + direction.toString());
                     });
                   },
                 ),
 
                 ElevatedButton(
                   child: Text('send on'),
-                  onPressed: () => send('on '),
+                  onPressed: () => send('0012345678901234'),
                 ),
 
                 ElevatedButton(
                   child: Text('send off'),
-                  onPressed: () => send('off'),
+                  onPressed: () => send('aabcdefghijklmno'),
                 ),
               ],
             ),

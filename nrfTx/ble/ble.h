@@ -19,7 +19,7 @@
 #include "pico_demo_gatt_service.h"
 #include "gap_config.h"
 
-extern char ble_data[80];
+extern char ble_data[16];
 struct pt_sem BLUETOOTH_READY;
 
 static int le_notification_enabled;
@@ -42,7 +42,7 @@ switch (att_handle){
     memcpy(ble_data, buffer, buffer_size);
     printf("%d\n",buffer_size);
     PT_SEM_SAFE_SIGNAL(pt, &BLUETOOTH_READY);
-    //printf_hexdump(buffer, buffer_size);
+    printf_hexdump(buffer, buffer_size);
     break;
   default:
     break;} return 0;}

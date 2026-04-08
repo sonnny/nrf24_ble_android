@@ -84,7 +84,7 @@ void nrf24_init(){
   writeReg1(6,0b00001110); //2mbs, 0dbm... max power
   writeReg2(0x0a,(uint8_t*)"gyroc",5); //address
   writeReg2(0x010,(uint8_t*)"gyroc",5); //address
-  writeReg1(0x11, 10); //message length
+  writeReg1(0x11, 16); //message length
 }
 
 void nrf24_modeTX(){
@@ -111,7 +111,7 @@ void nrf24_getMessage(uint8_t *buffer){
   uint8_t rx_payload = 0b01100001;
   CE_LOW;
   spi_write_blocking(spi1,&rx_payload,1);
-  spi_read_blocking(spi1,0xff,(uint8_t*)buffer,7); // 7 is message length
+  spi_read_blocking(spi1,0xff,(uint8_t*)buffer,16); // 7 is message length
   CS_HIGH;
   writeReg1(7,0b01000000);
 }
@@ -120,9 +120,9 @@ void nrf24_sendMessage(uint8_t *data){
   uint8_t flush_tx = 0b11100001;
   uint8_t tx_payload = 0b10100000;
   uint8_t status = readReg(7);
-  uint8_t buffer[32] = {0};
+  uint8_t buffer[16] = {0};
 
-  memcpy(buffer,data,10);
+  memcpy(buffer,data,16);
 
   if (status & 1){
     writeCommand(flush_tx);
@@ -133,7 +133,7 @@ void nrf24_sendMessage(uint8_t *data){
 
   CS_LOW;
   spi_write_blocking(spi1,&tx_payload,1);
-  spi_write_blocking(spi1,buffer,10);
+  spi_write_blocking(spi1,buffer,16);
   CS_HIGH;
   CE_HIGH;
 
