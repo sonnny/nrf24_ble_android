@@ -4,6 +4,15 @@ import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'dart:convert';
 
+// label for steering row buttons
+const List<Widget> steering_dir = <Widget>[
+  Text('max left'),
+  Text('left'),
+  Text('center'),
+  Text('right'),
+  Text('max right'),
+];
+
 class App extends StatefulWidget {
   App({super.key});
   @override
@@ -15,6 +24,7 @@ class AppState extends State<App> {
   late BluetoothCharacteristic bleTx;
   double _value = 0.0;
   bool direction = false;
+  List<bool> _selectedSteering = <bool>[false, false, true, false, false];
 
   Future<void> connect() async {
     final BluetoothDevice bleDevice = BluetoothDevice.fromId(
@@ -54,56 +64,91 @@ class AppState extends State<App> {
             child: Column(
               spacing: 50,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'throttle:',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
+                Padding(
+                  padding: EdgeInsets.fromLTRB(30, 0, 20, 0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Throttle:',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.0,
+                        ),
                       ),
-                    ),
-                    // SizedBox(width: 5),
-                    Expanded(
-                      child: Slider(
-                        value: _value,
-                        min: 0.0,
-                        max: 100.0,
-                        divisions: 20,
-                        label: _value.round().toString(),
-                        onChanged: (double d) {
-                          setState(() {
-                            _value = d;
-                          });
-                        },
-                        onChangeEnd: (double newValue) {
-                          setState(() {
-                            _value = newValue;
-                            print('T ' + newValue.round().toString());
-                            send('TT ' + newValue.round().toString());
-                          });
-                        },
+
+                      // SizedBox(width: 5),
+                      Expanded(
+                        child: Slider(
+                          value: _value,
+                          min: 0.0,
+                          max: 100.0,
+                          divisions: 10,
+                          label: _value.round().toString(),
+                          onChanged: (double d) {
+                            setState(() {
+                              _value = d;
+                            });
+                          },
+                          onChangeEnd: (double newValue) {
+                            setState(() {
+                              _value = newValue;
+                              send('tthr ' + newValue.round().toString());
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
                 SwitchListTile(
                   value: direction,
-                  title: Text('Direction'),
+                  title: Text(
+                    'Direction',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0,
+                    ),
+                  ),
                   subtitle: Text('forward or reverse'),
                   onChanged: (bool value) {
                     setState(() {
                       direction = !direction;
-                      send('DD ' + direction.toString());
-                      // if (direction)
-                      //   send('FFORWARD1111111');
-                      // else
-                      //  send('RREVERSE22222222');
-                      // send('D ' + direction.toString());
+                      send('ddir ' + direction.toString());
                     });
                   },
+                ),
+                Center(
+                  child: Text(
+                    'Steering',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24.0,
+                    ),
+                  ),
+                ),
+                // single choice horizontal toggle buttons
+                ToggleButtons(
+                  direction: Axis.horizontal,
+                  onPressed: (int index) {
+                    send('sste ' + index.toString());
+                    setState(() {
+                      for (int i = 0; i < _selectedSteering.length; i++) {
+                        _selectedSteering[i] = i == index;
+                      }
+                    });
+                  },
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  selectedBorderColor: Colors.red[700],
+                  selectedColor: Colors.white,
+                  fillColor: Colors.red[200],
+                  color: Colors.red[400],
+                  constraints: BoxConstraints(minHeight: 40.0, minWidth: 80.0),
+                  isSelected: _selectedSteering,
+                  children: steering_dir,
                 ),
 
                 ElevatedButton(

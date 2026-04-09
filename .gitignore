@@ -15,5 +15,7 @@ bleapp/bleapp.iml
 bleapp/pubspec.lock
 nrfRx/build
 nrfTx/build
+motor/build
+
 
 
