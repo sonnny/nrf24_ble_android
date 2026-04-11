@@ -24,6 +24,7 @@ class AppState extends State<App> {
   late BluetoothCharacteristic bleTx;
   double _value = 0.0;
   bool direction = false;
+  bool lightsOn = false;
   List<bool> _selectedSteering = <bool>[false, false, true, false, false];
 
   Future<void> connect() async {
@@ -151,14 +152,13 @@ class AppState extends State<App> {
                   children: steering_dir,
                 ),
 
-                ElevatedButton(
-                  child: Text('send on'),
-                  onPressed: () => send('0012345678901234'),
-                ),
-
-                ElevatedButton(
-                  child: Text('send off'),
-                  onPressed: () => send('aabcdefghijklmno'),
+                IconButton(
+                  iconSize: 30,
+                  icon: Icon(Icons.lightbulb),
+                  onPressed: () {
+                    lightsOn = !lightsOn;
+                    send('llig ' + lightsOn.toString());
+                  },
                 ),
               ],
             ),

@@ -14,10 +14,15 @@ class Home extends StatelessWidget {
         see plugin flutter_blue_plus on what to
            add to AndroidManifest.xml
 
-      data sent to nrf24l01 receiver
-        T 0 - 100  (T = throttle)
+      data sent to nrf24l01 receiver:
 
-        D false/true (D = direction)
+        thr 0 - 100    (throttle)
+
+        dir false/true (direction)
+        
+        ste 0|1|2|3    (steering)
+
+        lig false/true (lighting)
         
       '''),
       ),
