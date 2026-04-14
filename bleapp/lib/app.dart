@@ -6,11 +6,11 @@ import 'dart:convert';
 
 // label for steering row buttons
 const List<Widget> steering_dir = <Widget>[
-  Text('max left'),
+  Text('maxleft'),
   Text('left'),
   Text('center'),
   Text('right'),
-  Text('max right'),
+  Text('maxright'),
 ];
 
 class App extends StatefulWidget {
@@ -71,7 +71,7 @@ class AppState extends State<App> {
               spacing: 50,
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(30, 0, 20, 0),
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Row(
                     children: [
                       Text(
@@ -79,7 +79,7 @@ class AppState extends State<App> {
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
-                          fontSize: 24.0,
+                          fontSize: 20.0,
                         ),
                       ),
 
