@@ -56,10 +56,15 @@ class AppState extends State<App> {
   Widget build(BuildContext bc) {
     return Scaffold(
       body: Column(
-        spacing: 50,
+        spacing: 35,
         children: [
-          SizedBox(height: 50),
-          ElevatedButton(child: Text('ble connect'), onPressed: connect),
+          SizedBox(height: 70),
+          IconButton(
+            icon: Icon(Icons.bluetooth),
+            color: Colors.blue,
+            iconSize: 40,
+            onPressed: connect,
+          ),
           Visibility(
             visible: bleConnected,
             child: Column(
@@ -147,13 +152,13 @@ class AppState extends State<App> {
                   selectedColor: Colors.white,
                   fillColor: Colors.red[200],
                   color: Colors.red[400],
-                  constraints: BoxConstraints(minHeight: 40.0, minWidth: 80.0),
+                  constraints: BoxConstraints(minHeight: 40.0, minWidth: 60.0),
                   isSelected: _selectedSteering,
                   children: steering_dir,
                 ),
 
                 IconButton(
-                  iconSize: 30,
+                  iconSize: 50,
                   icon: Icon(Icons.lightbulb),
                   onPressed: () {
                     lightsOn = !lightsOn;
