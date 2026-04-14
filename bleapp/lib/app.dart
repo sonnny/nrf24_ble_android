@@ -157,12 +157,22 @@ class AppState extends State<App> {
                   children: steering_dir,
                 ),
 
+                // ElevatedButton(
+                //  onPressed: () {
+                //  lightsOn = !lightsOn;
+                //  send('x' + lightsOn.toString() + ' li');
+                // },
+                // child: Text('Light'),
+                // ),
                 IconButton(
                   iconSize: 50,
                   icon: Icon(Icons.lightbulb),
                   onPressed: () {
-                    lightsOn = !lightsOn;
-                    send('llig ' + lightsOn.toString());
+                    setState(() {
+                      lightsOn = !lightsOn;
+                      //send('llig ' + lightsOn.toString());
+                      send('x' + lightsOn.toString() + 'li ');
+                    });
                   },
                 ),
               ],
