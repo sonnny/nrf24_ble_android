@@ -61,7 +61,7 @@ class AppState extends State<App> {
           SizedBox(height: 70),
           IconButton(
             icon: Icon(Icons.bluetooth),
-            color: Colors.blue,
+            color: bleConnected ? Colors.blue : Colors.red,
             iconSize: 40,
             onPressed: connect,
           ),
@@ -165,6 +165,7 @@ class AppState extends State<App> {
                 // child: Text('Light'),
                 // ),
                 IconButton(
+                  color: lightsOn ? Colors.red : Colors.green,
                   iconSize: 50,
                   icon: Icon(Icons.lightbulb),
                   onPressed: () {

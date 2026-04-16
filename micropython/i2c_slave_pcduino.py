@@ -1,5 +1,6 @@
 #
 # process i2c data from nrf24l01 receiver
+# wiring for picoduino uno
 # breakdown to :
 #
 #    throttle: 0 - 100
@@ -10,6 +11,8 @@
 # 
 import utime
 from machine import I2CTarget, Pin
+
+utime.sleep(3)
 
 update = False
 data = bytearray(16)
@@ -51,7 +54,7 @@ def process_data():
     data[:] = b'\x00' * len(data)
     
 
-i2c = I2CTarget(1, addr=0x42, sda=Pin(10), scl=Pin(11), mem=data)
+i2c = I2CTarget(0, addr=0x42, scl=Pin(5), sda=Pin(4), mem=data)
 i2c.irq(i2c_handler)
 
 while True:
