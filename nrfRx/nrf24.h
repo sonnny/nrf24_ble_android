@@ -14,18 +14,25 @@
 #define CE_LOW  gpio_put(CE,LOW)
 #define CE_HIGH gpio_put(CE,HIGH)
 
-// pin definitions
-#define CS 9
-#define CE 8
-#define SCK 10
-#define MOSI 11
-#define MISO 12
+// pin definitions for rp2040zero
+// #define CS 9
+// #define CE 8
+// #define SCK 10
+// #define MOSI 11
+// #define MISO 12
+//
+// pin definitions for pcduino
+#define CS   17
+#define CE   11
+#define SCK  18
+#define MOSI 19
+#define MISO 16
 
 uint16_t packetsLost = 0;
 
 void writeCommand(uint8_t cmd){
   CS_LOW;
-  spi_write_blocking(spi1,&cmd,1);
+  spi_write_blocking(spi0,&cmd,1);
   CS_HIGH;
 }
 
@@ -33,8 +40,8 @@ uint8_t readReg(uint8_t reg){
   reg = 0b00011111 & reg;
   uint8_t result = 0;
   CS_LOW;
-  spi_write_blocking(spi1,&reg,1);
-  spi_read_blocking(spi1,0xff,&result,1);
+  spi_write_blocking(spi0,&reg,1);
+  spi_read_blocking(spi0,0xff,&result,1);
   CS_HIGH;
   return result;
 }
@@ -46,25 +53,25 @@ void writeReg1(uint8_t reg, uint8_t data){
   buf[0] = reg;
   buf[1] = data;
   CS_LOW;
-  spi_write_blocking(spi1,buf,2);
+  spi_write_blocking(spi0,buf,2);
   CS_HIGH;
 }
 
 void writeReg2(uint8_t reg, uint8_t *data, uint8_t size){
   reg = 0b00100000 | (0b00011111 & reg);
   CS_LOW;
-  spi_write_blocking(spi1,&reg,1);
-  spi_write_blocking(spi1,(uint8_t*)data,size);
+  spi_write_blocking(spi0,&reg,1);
+  spi_write_blocking(spi0,(uint8_t*)data,size);
   CS_HIGH;
 }
 
 void nrf24_init(){
 
   //hardware init
-  spi_init(spi1,8000000);
-  gpio_set_function(10,GPIO_FUNC_SPI);
-  gpio_set_function(11,GPIO_FUNC_SPI);
-  gpio_set_function(12,GPIO_FUNC_SPI);
+  spi_init(spi0,8000000);
+  gpio_set_function(18,GPIO_FUNC_SPI);
+  gpio_set_function(16,GPIO_FUNC_SPI);
+  gpio_set_function(19,GPIO_FUNC_SPI);
 
   gpio_init(CS); gpio_set_dir(CS,HIGH); CS_HIGH;
   gpio_init(CE); gpio_set_dir(CE,HIGH); CE_LOW;
@@ -117,8 +124,8 @@ uint8_t nrf24_newMessage(){
 void nrf24_getMessage(uint8_t *buffer){
   uint8_t rx_payload = 0b01100001;
   CS_LOW;
-  spi_write_blocking(spi1,&rx_payload,1);
-  spi_read_blocking(spi1,0xff,(uint8_t*)buffer,16); // 7 is message length
+  spi_write_blocking(spi0,&rx_payload,1);
+  spi_read_blocking(spi0,0xff,(uint8_t*)buffer,16); // 7 is message length
   CS_HIGH;
   // writeReg1(7,0b01000000);  
 }
@@ -139,8 +146,8 @@ void nrf24_sendMessage(uint8_t *data){
     writeReg1(7,0b00110000); //clear max_rt bit and dat send(TX_DS)
 
   CS_LOW;
-  spi_write_blocking(spi1,&tx_payload,1);
-  spi_write_blocking(spi1,buffer,16);
+  spi_write_blocking(spi0,&tx_payload,1);
+  spi_write_blocking(spi0,buffer,16);
   CS_HIGH;
   CE_HIGH;
 

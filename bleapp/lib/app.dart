@@ -23,7 +23,7 @@ class AppState extends State<App> {
   bool bleConnected = false;
   late BluetoothCharacteristic bleTx;
   double _value = 0.0;
-  bool direction = false;
+  bool direction = true;
   bool lightsOn = false;
   List<bool> _selectedSteering = <bool>[false, false, true, false, false];
 
@@ -55,16 +55,19 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext bc) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: connect,
+        // backgroundColor: bleConnected ? Colors.blue : Colors.red,
+        child: Icon(
+          Icons.bluetooth,
+          size: 30.0,
+          color: bleConnected ? Colors.blue : Colors.red,
+        ),
+      ),
       body: Column(
         spacing: 35,
         children: [
-          SizedBox(height: 70),
-          IconButton(
-            icon: Icon(Icons.bluetooth),
-            color: bleConnected ? Colors.blue : Colors.red,
-            iconSize: 40,
-            onPressed: connect,
-          ),
+          SizedBox(height: 50),
           Visibility(
             visible: bleConnected,
             child: Column(
@@ -83,7 +86,6 @@ class AppState extends State<App> {
                         ),
                       ),
 
-                      // SizedBox(width: 5),
                       Expanded(
                         child: Slider(
                           value: _value,
@@ -157,13 +159,6 @@ class AppState extends State<App> {
                   children: steering_dir,
                 ),
 
-                // ElevatedButton(
-                //  onPressed: () {
-                //  lightsOn = !lightsOn;
-                //  send('x' + lightsOn.toString() + ' li');
-                // },
-                // child: Text('Light'),
-                // ),
                 IconButton(
                   color: lightsOn ? Colors.red : Colors.green,
                   iconSize: 50,
