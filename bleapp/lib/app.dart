@@ -6,11 +6,11 @@ import 'dart:convert';
 
 // label for steering row buttons
 const List<Widget> steering_dir = <Widget>[
-  Text('maxleft'),
+  Text(' << '),
   Text('left'),
   Text('center'),
   Text('right'),
-  Text('maxright'),
+  Text(' >> '),
 ];
 
 class App extends StatefulWidget {
@@ -24,7 +24,8 @@ class AppState extends State<App> {
   late BluetoothCharacteristic bleTx;
   double _value = 0.0;
   bool direction = true;
-  bool lightsOn = false;
+  bool lightsOn1 = false;
+  bool lightsOn2 = false;
   List<bool> _selectedSteering = <bool>[false, false, true, false, false];
 
   Future<void> connect() async {
@@ -101,7 +102,7 @@ class AppState extends State<App> {
                           onChangeEnd: (double newValue) {
                             setState(() {
                               _value = newValue;
-                              send('tthr ' + newValue.round().toString());
+                              send('TT ' + newValue.round().toString());
                             });
                           },
                         ),
@@ -124,7 +125,7 @@ class AppState extends State<App> {
                   onChanged: (bool value) {
                     setState(() {
                       direction = !direction;
-                      send('ddir ' + direction.toString());
+                      send('DD ' + direction.toString());
                     });
                   },
                 ),
@@ -142,7 +143,7 @@ class AppState extends State<App> {
                 ToggleButtons(
                   direction: Axis.horizontal,
                   onPressed: (int index) {
-                    send('sste ' + index.toString());
+                    send('SS ' + index.toString());
                     setState(() {
                       for (int i = 0; i < _selectedSteering.length; i++) {
                         _selectedSteering[i] = i == index;
@@ -159,17 +160,33 @@ class AppState extends State<App> {
                   children: steering_dir,
                 ),
 
-                IconButton(
-                  color: lightsOn ? Colors.red : Colors.green,
-                  iconSize: 50,
-                  icon: Icon(Icons.lightbulb),
-                  onPressed: () {
-                    setState(() {
-                      lightsOn = !lightsOn;
-                      //send('llig ' + lightsOn.toString());
-                      send('x' + lightsOn.toString() + 'li ');
-                    });
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      color: lightsOn1 ? Colors.red : Colors.green,
+                      iconSize: 50,
+                      icon: Icon(Icons.lightbulb),
+                      onPressed: () {
+                        setState(() {
+                          lightsOn1 = !lightsOn1;
+                          send('L1 ' + lightsOn1.toString());
+                        });
+                      },
+                    ),
+
+                    IconButton(
+                      color: lightsOn2 ? Colors.red : Colors.green,
+                      iconSize: 50,
+                      icon: Icon(Icons.emoji_objects),
+                      onPressed: () {
+                        setState(() {
+                          lightsOn2 = !lightsOn2;
+                          String str = lightsOn2.toString();
+                          send("L2 $str");
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
