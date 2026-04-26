@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "nrf24.h"
+#include "motor.h"
 
 int motor_speed;
 
@@ -17,6 +18,7 @@ int main(){
   // gpio_pull_up(4);
   // gpio_pull_up(5);
   sleep_ms(1000);
+  motor_init();
   // printf("starting...\n");
   nrf24_init();
   nrf24_modeRX();
@@ -28,7 +30,8 @@ int main(){
 
       switch(message[0]){
         case 'T': motor_speed = (message[3] - 0x30) * 10;
-                  printf("motor speed: %d\n", motor_speed);
+                  set_motor_speed(motor_speed);
+                  // printf("motor speed: %d\n", motor_speed);
                   break;
 
         case 'D': if (message[3] == 't') printf("forward direction\n");
