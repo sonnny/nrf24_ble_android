@@ -20,12 +20,14 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
+  int? _groupValue = 0;
   bool bleConnected = false;
   late BluetoothCharacteristic bleTx;
   double _value = 0.0;
   bool direction = true;
   bool lightsOn1 = false;
   bool lightsOn2 = false;
+  String drive_stick = '0';
   List<bool> _selectedSteering = <bool>[false, false, true, false, false];
 
   Future<void> connect() async {
@@ -111,24 +113,31 @@ class AppState extends State<App> {
                   ),
                 ),
 
-                SwitchListTile(
-                  value: direction,
-                  title: Text(
-                    'Direction',
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24.0,
-                    ),
-                  ),
-                  subtitle: Text('forward or reverse'),
-                  onChanged: (bool value) {
+                RadioGroup<int>(
+                  groupValue: _groupValue,
+                  onChanged: (int? value) {
+                    print(value);
                     setState(() {
-                      direction = !direction;
-                      send('DD ' + direction.toString());
+                      if (value == 1) _value = 0.0;
+                      _groupValue = value;
+                      send('DD ' + value.toString());
                     });
                   },
+
+                  child: Center(
+                    child: Row(
+                      children: <Widget>[
+                        Radio<int>(value: 0),
+                        Text('drive'),
+                        Radio<int>(value: 1),
+                        Text('neutral'),
+                        Radio<int>(value: 2),
+                        Text('reverse'),
+                      ],
+                    ),
+                  ),
                 ),
+
                 Center(
                   child: Text(
                     'Steering',
