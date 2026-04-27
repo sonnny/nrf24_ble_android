@@ -7,6 +7,7 @@
 #include "pico/stdlib.h"
 #include "nrf24.h"
 #include "motor.h"
+#include "servo.h"
 
 #define BACK_MOTOR_DIRECTION 5
 
@@ -22,6 +23,7 @@ int main(){
   gpio_set_dir(BACK_MOTOR_DIRECTION, GPIO_OUT);
   
   motor_init();
+  servo_init();
   // printf("starting...\n");
   nrf24_init();
   nrf24_modeRX();
@@ -32,42 +34,46 @@ int main(){
 
       switch(message[0]){
         case 'T': motor_speed = (message[3] - 0x30) * 10;
-                  if (!neutral) set_motor_speed(motor_speed);
+                  // if (!neutral) set_motor_speed(motor_speed);
+                  set_motor_speed(motor_speed);
                   break;
 
         case 'D': switch(message[3]){
                   case 0x30: gpio_put(BACK_MOTOR_DIRECTION, 1);
-                             printf("drive\n");
+                             // printf("drive\n");
                              neutral = false;
                              break;
                               
                   case 0x32: gpio_put(BACK_MOTOR_DIRECTION, 0);
-                             printf("reverse\n");
+                             // printf("reverse\n");
                              neutral = false;
                              break;
                              
                   case 0x31: neutral = true;
-                             printf("neutral\n");
+                             // printf("neutral\n");
                              set_motor_speed(0);
                              break;
           }
+          break;
 
         //  case 'D': if (message[3] == 't') gpio_put(BACK_MOTOR_DIRECTION, 1);
             //      else gpio_put(BACK_MOTOR_DIRECTION, 0);
               //    break;
-
+ 
         case 'S': switch(message[3]){
-                    case 0x30: printf("max left\n"); break;
-                    case 0x31: printf("left\n"); break;
-                    case 0x32: printf("center\n"); break;
-                    case 0x33: printf("right\n"); break;
-                    case 0x34: printf("max right\n"); break;
+                    case 0x30: set_servo_angle(0.0f); break;
+                    case 0x31: set_servo_angle(70.0f); break;
+                    case 0x32: set_servo_angle(100.0f); break;
+                    case 0x33: set_servo_angle(130.0f); break;
+                    case 0x34: set_servo_angle(180.0f); break;
           }
-
+          break;
+ 
         case 'L': switch(message[1]){
                     case 0x31: printf("lights 1\n"); break;
                     case 0x32: printf("lights 2\n"); break;
           }
+          break;
       }
         for(int i=0; i<16; i++) printf(" %02x ",message[i]);
         printf("\n");
